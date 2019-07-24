@@ -1,3 +1,3 @@
-import MatterLine from "./matter-line";
+Line =require("./line");
 
-module.exports = MatterLine;
+module.exports = Line;
