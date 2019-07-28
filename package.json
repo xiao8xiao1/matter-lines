@@ -2,8 +2,7 @@
   "name": "matter-lines",
   "version": "0.1.0",
   "description": "",
-  "main": "js/main.js",
-
+  "main": "js/line.js",
   "scripts": {
     "test": "mocha test/**/*.js --compilers js:babel-register",
   },
