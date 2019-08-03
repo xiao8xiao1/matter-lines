@@ -2,7 +2,7 @@ export default class Line {
   constructor(defaultPoints = [], lineWidth = 10, miterLimit = 10) {
     this.points = defaultPoints;
     this.outsidePoints = [];
-    // this.insidePoints = [];
+    this.insidePoints = [];
     this.lineWidth = lineWidth;
     this.miterLimit = miterLimit;
 
@@ -13,7 +13,7 @@ export default class Line {
   clear() {
     this.points = [];
     this.outsidePoints = [];
-    // this.insidePoints = [];
+    this.insidePoints = [];
   }
   addPoint(point) {
     this.points.push(point);
@@ -21,7 +21,7 @@ export default class Line {
   }
   calculatePoints() {
     this.outsidePoints = [];
-    // this.insidePoints = [];
+    this.insidePoints = [];
     if (this.points.length <= 1) return;
     for (let index = 0; index < this.points.length; index++) {
       if (index === 0) {
@@ -41,7 +41,7 @@ export default class Line {
     const sin = Math.sin(rad) * this.lineWidth;
     const cos = Math.cos(rad) * this.lineWidth;
     this.outsidePoints.push({ x: point.x + cos, y: point.y + sin });
-    // this.insidePoints.push({ x: point.x - cos, y: point.y - sin });
+    this.insidePoints.push({ x: point.x - cos, y: point.y - sin });
   }
   calculateLastPoint(index) {
     const point = this.points[index];
@@ -51,7 +51,7 @@ export default class Line {
     const sin = Math.sin(rad) * this.lineWidth;
     const cos = Math.cos(rad) * this.lineWidth;
     this.outsidePoints.push({ x: point.x + cos, y: point.y + sin });
-    // this.insidePoints.push({ x: point.x - cos, y: point.y - sin });
+    this.insidePoints.push({ x: point.x - cos, y: point.y - sin });
   }
   calculateMiddlePoint(index) {
     const point = this.points[index];
@@ -73,16 +73,16 @@ export default class Line {
     } else {
       this.outsidePoints.push({ x: point.x + rx, y: point.y + ry });
     }
-    // if (distance > this.miterLimit && x >= 0) {
-    //   this.insidePoints.push({ x: point.x + Math.cos(rad1) * this.lineWidth, y: point.y + Math.sin(rad1) * this.lineWidth });
-    //   this.insidePoints.push({ x: point.x + Math.cos(rad2) * this.lineWidth, y: point.y + Math.sin(rad2) * this.lineWidth });
-    // } else {
-    //   this.insidePoints.push({ x: point.x - rx, y: point.y - ry });
-    // }
+    if (distance > this.miterLimit && x >= 0) {
+      this.insidePoints.push({ x: point.x + Math.cos(rad1) * this.lineWidth, y: point.y + Math.sin(rad1) * this.lineWidth });
+      this.insidePoints.push({ x: point.x + Math.cos(rad2) * this.lineWidth, y: point.y + Math.sin(rad2) * this.lineWidth });
+    } else {
+      this.insidePoints.push({ x: point.x - rx, y: point.y - ry });
+    }
   }
   getVertices() {
-    const vertices = this.outsidePoints.concat(this.points.reverse());
-    this.points.reverse();
+    const vertices = this.outsidePoints.concat(this.insidePoints.reverse());
+    this.insidePoints.reverse();
     return vertices;
   }
 }
